@@ -92,24 +92,22 @@ except Exception as e:
 def generate_otp():
     return str(secrets.randbelow(1000000)).zfill(6)
 
-def send_async_email(app, msg):
-    with app.app_context():
-        try:
-            mail.send(msg)
-            print("Email sent successfully")
-        except Exception as e:
-            print(f"Error sending email: {e}")
-
 def send_otp_email(email, otp):
-    msg = Message("Your Password Manager OTP",
-                  sender=app.config['MAIL_USERNAME'],
-                  recipients=[email])
-    msg.body = f"Your OTP code is: {otp}\n\nThis code expires in 10 minutes."
-    
-    # Send in background thread to avoid blocking
-    thr = threading.Thread(target=send_async_email, args=(app, msg))
-    thr.start()
-    return True
+    try:
+        msg = Message("Your Password Manager OTP",
+                      sender=app.config['MAIL_USERNAME'],
+                      recipients=[email])
+        msg.body = f"Your OTP code is: {otp}\n\nThis code expires in 10 minutes."
+        
+        # In Serverless (Vercel), background threads are unreliable.
+        # We must send synchronously to ensure the email actually goes out
+        # before the function execution freezes.
+        mail.send(msg)
+        print(f"OTP sent synchronously to {email}")
+        return True
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        return False
 
 # --- Routes ---
 
@@ -160,11 +158,11 @@ def register():
             cur.execute("UPDATE users SET password_hash = %s WHERE email = %s", (password_hash, email))
             
         conn.commit()
-        cur.close()
     
-    send_otp_email(email, otp)
-    
-    return jsonify({"message": "OTP sent to email", "status": "otp_sent"})
+    if send_otp_email(email, otp):
+        return jsonify({"message": "OTP sent to email", "status": "otp_sent"})
+    else:
+        return jsonify({"error": "Failed to send OTP email"}), 500
 
 @app.route('/api/verify-otp', methods=['POST'])
 def verify_otp():
