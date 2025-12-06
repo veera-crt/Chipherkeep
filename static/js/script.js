@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
             if (data.logged_in) {
                 currentEmail = data.email;
-                await showDashboard();
+                await showDashboard(data.remaining_seconds);
                 // Ensure landing is hidden if we go straight to dashboard
                 document.getElementById('landing-view').classList.add('hidden');
             } else {
@@ -214,11 +214,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function showDashboard() {
+    async function showDashboard(remainingSeconds = 600) {
         showView('dashboard');
         switchTab('vault'); // Ensure start on vault
         userEmailDisplay.textContent = currentEmail.split('@')[0];
-        startSessionTimer(); // Start the visual countdown
+        startSessionTimer(remainingSeconds); // Start the visual countdown
         await fetchPasswords();
     }
 
@@ -409,13 +409,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Utils ---
 
-    function startSessionTimer() {
+    function startSessionTimer(remaining = 600) {
         const bar = document.getElementById('session-progress-bar');
         if (bar) {
             // Reset animation
             bar.classList.remove('animate');
             void bar.offsetWidth; // Trigger reflow
+
+            // Calculate elapsed time to set animation start point
+            // Total duration is 600s (10 mins)
+            const totalDuration = 600;
+            const elapsed = totalDuration - remaining;
+
+            if (remaining <= 0) {
+                // If already expired
+                bar.style.width = '0%';
+                window.location.reload(); // Force refresh to logout
+                return;
+            }
+
+            // Negative delay seeks the animation to that point in time
+            bar.style.animationDelay = `-${elapsed}s`;
             bar.classList.add('animate');
+
+            // Auto-logout when timer ends
+            setTimeout(() => {
+                window.location.reload();
+            }, remaining * 1000);
         }
     }
 

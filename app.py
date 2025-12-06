@@ -210,6 +210,8 @@ def login():
         session.permanent = True
         session['user_id'] = user['id']
         session['email'] = user['email']
+        # Hard 10 minute limit from right now
+        session['expires_at'] = (datetime.datetime.now() + datetime.timedelta(minutes=10)).timestamp()
         return jsonify({"message": "Login successful", "success": True})
         
     return jsonify({"error": "Invalid credentials or unverified account"}), 401
@@ -219,10 +221,21 @@ def logout():
     session.clear()
     return jsonify({"success": True})
 
+@app.before_request
+def check_session_expiry():
+    if 'user_id' in session and 'expires_at' in session:
+        now = datetime.datetime.now().timestamp()
+        if now > session['expires_at']:
+            session.clear()
+
 @app.route('/api/check-session', methods=['GET'])
 def check_session():
     if 'user_id' in session:
-        return jsonify({"logged_in": True, "email": session['email']})
+        remaining = 0
+        if 'expires_at' in session:
+            remaining = session['expires_at'] - datetime.datetime.now().timestamp()
+        
+        return jsonify({"logged_in": True, "email": session['email'], "remaining_seconds": remaining})
     return jsonify({"logged_in": False})
 
 # --- Vault API ---
