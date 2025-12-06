@@ -30,6 +30,11 @@ body {
     line-height: 1.6;
 }
 
+/* --- Utility classes --- */
+.hidden {
+    display: none !important;
+}
+
 a {
     text-decoration: none;
     color: inherit;
