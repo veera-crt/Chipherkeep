@@ -469,10 +469,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showView(viewId) {
+        // Clear hash when switching main views (e.g. removing #about from dashboard)
+        if (viewId === 'dashboard' || viewId === 'auth') {
+            history.replaceState(null, null, ' ');
+        }
+
         Object.values(views).forEach(el => {
             el.classList.remove('active');
             el.classList.add('hidden');
-            el.style.display = 'none';
+            el.style.display = 'none'; // Keep original display logic
         });
         const target = views[viewId];
         target.classList.remove('hidden');
