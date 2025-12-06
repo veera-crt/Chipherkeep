@@ -142,8 +142,8 @@
                 <nav>
                     <button id="close-sidebar-btn" class="icon-btn mobile-only"><i
                             class="fa-solid fa-xmark"></i></button>
-                    <a href="#" class="nav-item active"><i class="fa-solid fa-vault"></i> All Items</a>
-                    <!-- <a href="#" class="nav-item"><i class="fa-solid fa-star"></i> Favorites</a> -->
+                    <a href="#" class="nav-item active" id="nav-vault"><i class="fa-solid fa-vault"></i> All Items</a>
+                    <a href="#" class="nav-item" id="nav-settings"><i class="fa-solid fa-gear"></i> Settings</a>
                 </nav>
                 <div class="user-profile">
                     <div class="avatar">CK</div>
@@ -158,30 +158,77 @@
 
             <!-- Main Content -->
             <main class="main-content">
-                <header class="top-bar glass-panel">
-                    <div class="search-bar">
-                        <button id="mobile-menu-btn" class="icon-btn mobile-only"><i
-                                class="fa-solid fa-bars"></i></button>
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" placeholder="Search your vault...">
+                <div id="vault-tab">
+                    <header class="top-bar glass-panel">
+                        <div class="search-bar">
+                            <button id="mobile-menu-btn" class="icon-btn mobile-only"><i
+                                    class="fa-solid fa-bars"></i></button>
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" placeholder="Search your vault...">
+                        </div>
+                        <button id="add-btn" class="btn-primary small">
+                            <i class="fa-solid fa-plus"></i> New Item
+                        </button>
+                    </header>
+
+                    <div class="content-area" style="padding-top: 20px;">
+                        <h2>All Passwords <span class="count" id="item-count">0</span></h2>
+
+                        <div id="password-list" class="password-grid">
+                            <!-- Password Items will be injected here -->
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="empty-state" class="empty-state">
+                            <i class="fa-solid fa-safe"></i>
+                            <h3>Your vault is empty</h3>
+                            <p>Add your first password to get started.</p>
+                        </div>
                     </div>
-                    <button id="add-btn" class="btn-primary small">
-                        <i class="fa-solid fa-plus"></i> New Item
-                    </button>
-                </header>
+                </div>
 
-                <div class="content-area">
-                    <h2>All Passwords <span class="count" id="item-count">0</span></h2>
+                <!-- Settings Tab -->
+                <div id="settings-tab" class="hidden" style="padding: 20px; overflow-y: auto;">
+                    <h2 style="margin-bottom: 30px;">Account Settings</h2>
 
-                    <div id="password-list" class="password-grid">
-                        <!-- Password Items will be injected here -->
+                    <div class="glass-container" style="max-width: 600px; padding: 30px; margin-bottom: 30px;">
+                        <h3 style="margin-bottom: 20px; color: var(--accent-secondary);"><i
+                                class="fa-solid fa-user"></i> Change Email</h3>
+                        <form id="change-email-form">
+                            <div class="input-group">
+                                <i class="fa-solid fa-envelope"></i>
+                                <input type="email" id="settings-new-email" placeholder="New Email Address" required>
+                            </div>
+                            <div class="input-group">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="settings-email-password"
+                                    placeholder="Confirm with Current Password" required>
+                            </div>
+                            <button type="submit" class="btn-primary">Update Email</button>
+                        </form>
                     </div>
 
-                    <!-- Empty State -->
-                    <div id="empty-state" class="empty-state">
-                        <i class="fa-solid fa-safe"></i>
-                        <h3>Your vault is empty</h3>
-                        <p>Add your first password to get started.</p>
+                    <div class="glass-container" style="max-width: 600px; padding: 30px;">
+                        <h3 style="margin-bottom: 20px; color: var(--accent-primary);"><i class="fa-solid fa-key"></i>
+                            Change Master Password</h3>
+                        <form id="change-password-form">
+                            <div class="input-group">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="settings-old-password" placeholder="Current Password"
+                                    required>
+                            </div>
+                            <div class="input-group">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="settings-new-password" placeholder="New Password" required
+                                    minlength="6">
+                            </div>
+                            <div class="input-group">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="settings-confirm-password" placeholder="Confirm New Password"
+                                    required minlength="6">
+                            </div>
+                            <button type="submit" class="btn-primary">Update Password</button>
+                        </form>
                     </div>
                 </div>
             </main>

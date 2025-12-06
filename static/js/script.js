@@ -58,6 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Toast
     const toast = document.getElementById('toast');
 
+    // Settings & Tabs
+    const navVault = document.getElementById('nav-vault');
+    const navSettings = document.getElementById('nav-settings');
+    const vaultTab = document.getElementById('vault-tab');
+    const settingsTab = document.getElementById('settings-tab');
+
+    // Settings Forms
+    const changeEmailForm = document.getElementById('change-email-form');
+    const changePasswordForm = document.getElementById('change-password-form');
+
     // --- Initialization ---
     checkSession();
 
@@ -323,6 +333,96 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (err) {
             showToast('Error saving password');
+        }
+    });
+
+    // --- Settings Logic ---
+    navVault.addEventListener('click', (e) => {
+        e.preventDefault();
+        switchTab('vault');
+    });
+
+    navSettings.addEventListener('click', (e) => {
+        e.preventDefault();
+        switchTab('settings');
+        // Pre-fill current email if possible, though 'new email' implies empty
+    });
+
+    function switchTab(tabName) {
+        if (tabName === 'vault') {
+            vaultTab.classList.remove('hidden');
+            settingsTab.classList.add('hidden');
+            navVault.classList.add('active');
+            navSettings.classList.remove('active');
+        } else {
+            vaultTab.classList.add('hidden');
+            settingsTab.classList.remove('hidden');
+            navVault.classList.remove('active');
+            navSettings.classList.add('active');
+        }
+    }
+
+    changeEmailForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newEmail = document.getElementById('settings-new-email').value;
+        const password = document.getElementById('settings-email-password').value;
+        const btn = changeEmailForm.querySelector('button');
+
+        setLoading(btn, true);
+        try {
+            const res = await fetch('/api/change-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ newEmail, password })
+            });
+            const data = await res.json();
+            setLoading(btn, false);
+
+            if (res.ok) {
+                showToast('Email updated successfully');
+                changeEmailForm.reset();
+                currentEmail = newEmail;
+                userEmailDisplay.textContent = currentEmail.split('@')[0];
+            } else {
+                showToast(data.error || 'Failed to update email');
+            }
+        } catch (err) {
+            setLoading(btn, false);
+            showToast('Network error');
+        }
+    });
+
+    changePasswordForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const oldPassword = document.getElementById('settings-old-password').value;
+        const newPassword = document.getElementById('settings-new-password').value;
+        const confirmPassword = document.getElementById('settings-confirm-password').value;
+        const btn = changePasswordForm.querySelector('button');
+
+        if (newPassword !== confirmPassword) {
+            showToast('New passwords do not match');
+            return;
+        }
+
+        setLoading(btn, true);
+        try {
+            const res = await fetch('/api/change-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ oldPassword, newPassword })
+            });
+            const data = await res.json();
+            setLoading(btn, false);
+
+            if (res.ok) {
+                showToast('Password updated successfully');
+                changePasswordForm.reset();
+            } else {
+                showToast(data.error || 'Failed to update password');
+            }
+        } catch (err) {
+            setLoading(btn, false);
+            showToast('Network error');
         }
     });
 
