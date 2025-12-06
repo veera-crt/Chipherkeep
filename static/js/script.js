@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const settingsTab = document.getElementById('settings-tab');
 
     // Settings Forms
-    const changeEmailForm = document.getElementById('change-email-form');
     const changePasswordForm = document.getElementById('change-password-form');
 
     // --- Initialization ---
@@ -207,6 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function showDashboard() {
         showView('dashboard');
+        switchTab('vault'); // Ensure start on vault
         userEmailDisplay.textContent = currentEmail.split('@')[0];
         await fetchPasswords();
     }
@@ -361,36 +361,6 @@ document.addEventListener('DOMContentLoaded', () => {
             navSettings.classList.add('active');
         }
     }
-
-    changeEmailForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const newEmail = document.getElementById('settings-new-email').value;
-        const password = document.getElementById('settings-email-password').value;
-        const btn = changeEmailForm.querySelector('button');
-
-        setLoading(btn, true);
-        try {
-            const res = await fetch('/api/change-email', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ newEmail, password })
-            });
-            const data = await res.json();
-            setLoading(btn, false);
-
-            if (res.ok) {
-                showToast('Email updated successfully');
-                changeEmailForm.reset();
-                currentEmail = newEmail;
-                userEmailDisplay.textContent = currentEmail.split('@')[0];
-            } else {
-                showToast(data.error || 'Failed to update email');
-            }
-        } catch (err) {
-            setLoading(btn, false);
-            showToast('Network error');
-        }
-    });
 
     changePasswordForm.addEventListener('submit', async (e) => {
         e.preventDefault();

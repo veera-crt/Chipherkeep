@@ -342,35 +342,7 @@ def change_password():
         
     return jsonify({"success": True})
 
-@app.route('/api/change-email', methods=['POST'])
-def change_email():
-    if 'user_id' not in session:
-        return jsonify({"error": "Unauthorized"}), 401
-        
-    data = request.json
-    password = data.get('password')
-    new_email = data.get('newEmail')
-    
-    user_id = session['user_id']
-    
-    with get_db_connection() as conn:
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM users WHERE id = %s", (user_id,))
-        user = cur.fetchone()
-        
-        if not check_password_hash(user['password_hash'], password):
-            return jsonify({"error": "Incorrect password"}), 400
-            
-        try:
-            cur.execute("UPDATE users SET email = %s WHERE id = %s", (new_email, user_id))
-            conn.commit()
-        except psycopg2.IntegrityError:
-            # Rollback is handled by context manager/pool usually, but explicit request usually good
-            conn.rollback() 
-            return jsonify({"error": "Email already in use"}), 400
-            
-    session['email'] = new_email
-    return jsonify({"success": True})
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
