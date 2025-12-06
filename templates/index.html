@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CipherKeep | Secure Password Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Landing Page Section -->
+    <section id="landing-view" class="view active">
+        <nav class="landing-nav glass-panel">
+            <div class="logo">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>CipherKeep</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#about">About</a>
+                <button id="nav-login-btn" class="btn-primary small">Sign In</button>
+            </div>
+        </nav>
+
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1>Secure your <span class="gradient-text">digital future</span>.</h1>
+                <p>The most advanced password manager for individuals and teams. Bank-grade encryption verified with
+                    OTP.</p>
+                <div class="hero-actions">
+                    <button id="hero-cta-btn" class="btn-primary">Get Started Free <i
+                            class="fa-solid fa-arrow-right"></i></button>
+                    <button class="btn-secondary"><i class="fa-solid fa-play"></i> Watch Demo</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="glass-card floating-card card-1">
+                    <i class="fa-brands fa-google"></i>
+                    <div class="dots">••••••••</div>
+                </div>
+                <div class="glass-card floating-card card-2">
+                    <i class="fa-solid fa-check-shield"></i>
+                    <span>Protected</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card glass-panel">
+                <div class="icon-box"><i class="fa-solid fa-lock"></i></div>
+                <h3>AES-256 Encryption</h3>
+                <p>Military-grade encryption ensures only you have access to your data.</p>
+            </div>
+            <div class="feature-card glass-panel">
+                <div class="icon-box"><i class="fa-solid fa-mobile-screen"></i></div>
+                <h3>Verified Access</h3>
+                <p>OTP verification ensures complete account security on every login.</p>
+            </div>
+            <div class="feature-card glass-panel">
+                <div class="icon-box"><i class="fa-solid fa-bolt"></i></div>
+                <h3>Lightning Fast</h3>
+                <p>Optimized performance for instant access to your credentials.</p>
+            </div>
+        </div>
+
+
+    </section>
+
+    <!-- Auth Section -->
+    <section id="auth-view" class="view hidden">
+        <button id="auth-back-btn" class="icon-btn back-btn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+        <div class="glass-container auth-card">
+            <div class="logo">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h1>CipherKeep</h1>
+            </div>
+            <p class="subtitle" id="auth-subtitle">Secure your digital life with elegance.</p>
+
+            <form id="auth-form">
+                <div class="input-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="master-password" placeholder="Master Password" required>
+                    <button type="button" class="toggle-visibility auth-toggle"><i class="fa-solid fa-eye"></i></button>
+                </div>
+                <button type="submit" class="btn-primary" id="auth-submit-btn">
+                    <span>Sign In</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+            <p class="footer-text" id="auth-switch-text">Don't have an account? <a href="#" id="switch-auth-link">Sign
+                    up</a></p>
+        </div>
+    </section>
+
+    <!-- OTP Verification Modal (Separate View) -->
+    <section id="otp-view" class="view hidden">
+        <button id="otp-back-btn" class="icon-btn back-btn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+        <div class="glass-container auth-card">
+            <div class="icon-box" style="margin-bottom: 20px;"><i class="fa-solid fa-envelope-open-text"></i></div>
+            <h2>Verify Your Email</h2>
+            <p class="subtitle">Enter the 6-digit code sent to <span id="otp-email-display"
+                    style="color:white; font-weight:600;"></span></p>
+
+            <form id="otp-form">
+                <div class="input-group">
+                    <i class="fa-solid fa-key"></i>
+                    <input type="text" id="otp-input" placeholder="Enter OTP Code" maxlength="6" pattern="\d{6}"
+                        required style="letter-spacing: 5px; text-align: center; font-size: 1.2rem;">
+                </div>
+                <button type="submit" class="btn-primary">
+                    <span>Verify Account</span>
+                </button>
+            </form>
+            <p class="footer-text"><a href="#" id="resend-otp">Resend Code</a></p>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard-view" class="view hidden">
+        <div class="dashboard-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar glass-panel">
+                <div class="brand">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>CipherKeep</span>
+                </div>
+                <nav>
+                    <button id="close-sidebar-btn" class="icon-btn mobile-only"><i
+                            class="fa-solid fa-xmark"></i></button>
+                    <a href="#" class="nav-item active"><i class="fa-solid fa-vault"></i> All Items</a>
+                    <!-- <a href="#" class="nav-item"><i class="fa-solid fa-star"></i> Favorites</a> -->
+                </nav>
+                <div class="user-profile">
+                    <div class="avatar">CK</div>
+                    <div class="info">
+                        <span class="name" id="user-email-display">User</span>
+                        <span class="plan">Premium</span>
+                    </div>
+                    <button id="logout-btn" class="icon-btn"><i
+                            class="fa-solid fa-arrow-right-from-bracket"></i></button>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <header class="top-bar glass-panel">
+                    <div class="search-bar">
+                        <button id="mobile-menu-btn" class="icon-btn mobile-only"><i
+                                class="fa-solid fa-bars"></i></button>
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search your vault...">
+                    </div>
+                    <button id="add-btn" class="btn-primary small">
+                        <i class="fa-solid fa-plus"></i> New Item
+                    </button>
+                </header>
+
+                <div class="content-area">
+                    <h2>All Passwords <span class="count" id="item-count">0</span></h2>
+
+                    <div id="password-list" class="password-grid">
+                        <!-- Password Items will be injected here -->
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="empty-state" class="empty-state">
+                        <i class="fa-solid fa-safe"></i>
+                        <h3>Your vault is empty</h3>
+                        <p>Add your first password to get started.</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    <!-- Add Item Modal -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="glass-container modal">
+            <div class="modal-header">
+                <h3>Add New Password</h3>
+                <button id="close-modal" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="add-password-form">
+                <div class="input-group">
+                    <i class="fa-brands fa-google"></i> <!-- Dynamic Icon Placeholder -->
+                    <input type="text" id="site-name" placeholder="Website / App Name" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="username" placeholder="Username / Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-key"></i>
+                    <input type="password" id="password" placeholder="Password" required>
+                    <div class="password-actions-right">
+                        <button type="button" id="generate-btn" class="icon-btn" title="Generate Password"><i
+                                class="fa-solid fa-shuffle"></i></button>
+                        <button type="button" class="toggle-visibility"><i class="fa-solid fa-eye"></i></button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Save Password</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>Notification</span>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>
