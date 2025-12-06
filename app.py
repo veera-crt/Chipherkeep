@@ -220,8 +220,8 @@ def logout():
 @app.route('/api/check-session', methods=['GET'])
 def check_session():
     if 'user_id' in session:
-        return jsonify({"isLoggedIn": True, "email": session['email']})
-    return jsonify({"isLoggedIn": False})
+        return jsonify({"logged_in": True, "email": session['email']})
+    return jsonify({"logged_in": False})
 
 # --- Vault API ---
 
