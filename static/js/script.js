@@ -218,6 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showView('dashboard');
         switchTab('vault'); // Ensure start on vault
         userEmailDisplay.textContent = currentEmail.split('@')[0];
+        startSessionTimer(); // Start the visual countdown
         await fetchPasswords();
     }
 
@@ -407,6 +408,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Utils ---
+
+    function startSessionTimer() {
+        const bar = document.getElementById('session-progress-bar');
+        if (bar) {
+            // Reset animation
+            bar.classList.remove('animate');
+            void bar.offsetWidth; // Trigger reflow
+            bar.classList.add('animate');
+        }
+    }
+
     function showView(viewId) {
         Object.values(views).forEach(el => {
             el.classList.remove('active');

@@ -833,3 +833,88 @@ input {
         /* Keep login button */
     }
 }
+/* --- Session Indicator --- */
+.session-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.session-bar-container {
+    width: 80px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.session-bar {
+    height: 100%;
+    background: var(--accent-secondary);
+    width: 100%;
+    transform-origin: left;
+    /* Animation applied via JS class to control reset */
+}
+
+.session-bar.animate {
+    animation: session-countdown 600s linear forwards;
+}
+
+@keyframes session-countdown {
+    0% { width: 100%; opacity: 1; }
+    80% { opacity: 1; }
+    90% { background: var(--danger); opacity: 0.8; }
+    100% { width: 0%; background: var(--danger); opacity: 0.5; }
+}
+
+.session-info-wrapper {
+    position: relative;
+    cursor: help;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+}
+
+.session-info-wrapper:hover {
+    color: var(--text-primary);
+}
+
+.custom-tooltip {
+    visibility: hidden;
+    width: 200px;
+    background-color: rgba(15, 15, 19, 0.95);
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 10px;
+    position: absolute;
+    z-index: 100;
+    bottom: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    font-size: 0.75rem;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    pointer-events: none;
+}
+
+.custom-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(15, 15, 19, 0.95) transparent transparent transparent;
+}
+
+.session-info-wrapper:hover .custom-tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
+}
