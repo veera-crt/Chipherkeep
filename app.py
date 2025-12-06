@@ -16,6 +16,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "super_secret_key")
+app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(minutes=10)
 
 # Configuration
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -206,6 +207,7 @@ def login():
         user = cur.fetchone()
     
     if user and user['is_verified'] and check_password_hash(user['password_hash'], password):
+        session.permanent = True
         session['user_id'] = user['id']
         session['email'] = user['email']
         return jsonify({"message": "Login successful", "success": True})
