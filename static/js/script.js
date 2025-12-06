@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Toast
     const toast = document.getElementById('toast');
+    const initialLoader = document.getElementById('initial-loader');
 
     // Settings & Tabs
     const navVault = document.getElementById('nav-vault');
@@ -187,20 +188,29 @@ document.addEventListener('DOMContentLoaded', () => {
         currentEmail = '';
     });
 
-    // --- Core Funcs ---
+    // --- Functions ---
 
     async function checkSession() {
         try {
             const res = await fetch('/api/check-session');
             const data = await res.json();
-            if (data.isLoggedIn) {
+            if (data.logged_in) {
                 currentEmail = data.email;
-                showDashboard();
+                await showDashboard();
+                // Ensure landing is hidden if we go straight to dashboard
+                document.getElementById('landing-view').classList.add('hidden');
             } else {
                 showView('landing');
             }
         } catch (err) {
+            console.error(err);
             showView('landing');
+        } finally {
+            // Remove initial loader once we know where to go
+            if (initialLoader) {
+                initialLoader.style.opacity = '0';
+                setTimeout(() => initialLoader.remove(), 500);
+            }
         }
     }
 

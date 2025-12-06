@@ -19,8 +19,23 @@
         <div class="blob blob-3"></div>
     </div>
 
+    <!-- Initial Loading Overlay -->
+    <style>
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <div id="initial-loader"
+        style="position: fixed; inset: 0; background: var(--bg-color); z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s ease;">
+        <div
+            style="width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--accent-primary); border-radius: 50%; animation: spin 1s linear infinite;">
+        </div>
+    </div>
+
     <!-- Landing Page Section -->
-    <section id="landing-view" class="view active">
+    <section id="landing-view" class="view hidden">
         <nav class="landing-nav glass-panel">
             <div class="logo">
                 <i class="fa-solid fa-shield-halved"></i>
