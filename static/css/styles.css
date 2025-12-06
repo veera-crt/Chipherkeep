@@ -555,7 +555,9 @@ input {
     padding: 0 16px;
     display: flex;
     align-items: center;
-    width: 400px;
+    width: 100%;
+    /* default to fluid, max-width handles desktop */
+    max-width: 400px;
     height: 44px;
     gap: 10px;
     color: var(--text-secondary);
@@ -820,8 +822,17 @@ input {
     }
 
     .search-bar {
-        display: none;
-        /* Simplify for mobile */
+        display: flex;
+        /* separate from none */
+        width: auto;
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    .search-bar input {
+        width: 100%;
+        font-size: 16px;
+        /* prevent zoom on ios */
     }
 
     .password-grid {

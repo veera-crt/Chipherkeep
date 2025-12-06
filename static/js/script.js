@@ -222,7 +222,36 @@ document.addEventListener('DOMContentLoaded', () => {
         await fetchPasswords();
     }
 
-    // --- Vault Logic ---
+    // --- Search Logic ---
+    const searchInput = document.querySelector('.search-bar input');
+
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        const cards = document.querySelectorAll('.password-card');
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const siteName = card.querySelector('.site-info h3').textContent.toLowerCase();
+            const username = card.querySelector('.site-info p').textContent.toLowerCase();
+
+            if (siteName.includes(query) || username.includes(query)) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Toggle empty state based on search results
+        if (visibleCount === 0 && cards.length > 0) {
+            // Optional: Show a "No results found" message instead of generic empty state?
+            // For now, let's just create a 'no-results' specific state or reuse empty state if strictly empty
+            // But simply hiding all cards might look like empty state.
+            // Let's rely on the fact that if all are hidden, the grid is empty visually.
+        }
+    });
+
+    // --- Modal Logic ---
 
     async function fetchPasswords() {
         try {
