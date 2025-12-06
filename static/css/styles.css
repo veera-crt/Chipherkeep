@@ -528,7 +528,16 @@ input {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    /* Remove gap to let inner containers handle it */
+    overflow: hidden;
+    height: 100%;
+}
+
+/* Vault Tab Specific Structure for Scrolling */
+#vault-tab {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     overflow: hidden;
 }
 
@@ -560,6 +569,8 @@ input {
     flex: 1;
     overflow-y: auto;
     padding-right: 8px;
+    padding-bottom: 20px;
+    /* Space for scrolling */
 }
 
 .content-area h2 {
@@ -833,6 +844,7 @@ input {
         /* Keep login button */
     }
 }
+
 /* --- Session Indicator --- */
 .session-status {
     display: flex;
@@ -862,10 +874,25 @@ input {
 }
 
 @keyframes session-countdown {
-    0% { width: 100%; opacity: 1; }
-    80% { opacity: 1; }
-    90% { background: var(--danger); opacity: 0.8; }
-    100% { width: 0%; background: var(--danger); opacity: 0.5; }
+    0% {
+        width: 100%;
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    90% {
+        background: var(--danger);
+        opacity: 0.8;
+    }
+
+    100% {
+        width: 0%;
+        background: var(--danger);
+        opacity: 0.5;
+    }
 }
 
 .session-info-wrapper {
@@ -898,7 +925,7 @@ input {
     transition: opacity 0.3s, transform 0.3s;
     font-size: 0.75rem;
     border: 1px solid var(--glass-border);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     pointer-events: none;
 }
 
